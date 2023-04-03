@@ -4,7 +4,7 @@ mod mirror;
 pub mod builtin_schema;
 pub mod schema;
 
-use self::schema::PresetSchemaNode;
+use self::schema::PresetSchema;
 use alvr_packets::PathValuePair;
 use eframe::egui::Ui;
 use serde_json as json;
@@ -15,12 +15,15 @@ pub enum PresetControl {
 }
 
 impl PresetControl {
-    pub fn new(schema: PresetSchemaNode) -> Self {
+    pub fn new(schema: PresetSchema) -> Self {
         match schema {
-            PresetSchemaNode::HigherOrderChoice(schema) => {
+            PresetSchema::Choice(schema) => {
                 Self::HigherOrderChoice(higher_order_choice::Control::new(schema))
             }
-            PresetSchemaNode::Mirror(_) => unimplemented!(),
+            PresetSchema::Mirror(_) => unimplemented!(),
+            PresetSchema::GameAudioPlaceholder => todo!(),
+            PresetSchema::MicrophonePlaceholder => todo!(),
+            
         }
     }
 
@@ -38,3 +41,5 @@ impl PresetControl {
         }
     }
 }
+
+pub struct PresetEntry {}

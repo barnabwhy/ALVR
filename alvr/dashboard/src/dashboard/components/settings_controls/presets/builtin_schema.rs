@@ -1,5 +1,5 @@
 use super::schema::{
-    HigherOrderChoiceOption, HigherOrderChoiceSchema, PresetModifier, PresetSchemaNode,
+    HigherOrderChoiceOption, HigherOrderChoiceSchema, PresetModifier, PresetSchema,
 };
 use crate::dashboard::components::presets::schema::PresetModifierOperation;
 use settings_schema::ChoiceControlType;
@@ -29,8 +29,8 @@ fn bool_modifier(target_path: &str, value: bool) -> PresetModifier {
     }
 }
 
-pub fn resolution_schema() -> PresetSchemaNode {
-    PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
+pub fn resolution_schema() -> PresetSchema {
+    PresetSchema::Choice(HigherOrderChoiceSchema {
         name: "resolution".into(),
         strings: HashMap::new(),
         flags: ["steamvr-restart".into()].into_iter().collect(),
@@ -81,8 +81,8 @@ pub fn resolution_schema() -> PresetSchemaNode {
     })
 }
 
-pub fn framerate_schema() -> PresetSchemaNode {
-    PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
+pub fn framerate_schema() -> PresetSchema {
+    PresetSchema::Choice(HigherOrderChoiceSchema {
         name: "preferred_framerate".into(),
         strings: HashMap::new(),
         flags: ["steamvr-restart".into()].into_iter().collect(),
@@ -104,8 +104,8 @@ pub fn framerate_schema() -> PresetSchemaNode {
     })
 }
 
-pub fn encoder_preset_schema() -> PresetSchemaNode {
-    PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
+pub fn encoder_preset_schema() -> PresetSchema {
+    PresetSchema::Choice(HigherOrderChoiceSchema {
         name: "encoder_preset".into(),
         strings: [(
             "help".into(),
@@ -142,7 +142,7 @@ pub fn encoder_preset_schema() -> PresetSchemaNode {
     })
 }
 
-pub fn game_audio_schema(devices: Vec<String>) -> PresetSchemaNode {
+pub fn game_audio_schema(devices: Vec<String>) -> PresetSchema {
     let mut game_audio_options = vec![
         HigherOrderChoiceOption {
             display_name: "Disabled".into(),
@@ -184,7 +184,7 @@ pub fn game_audio_schema(devices: Vec<String>) -> PresetSchemaNode {
         })
     }
 
-    PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
+    PresetSchema::Choice(HigherOrderChoiceSchema {
         name: "game_audio".into(),
         strings: [(
             "help".into(),
@@ -199,7 +199,7 @@ pub fn game_audio_schema(devices: Vec<String>) -> PresetSchemaNode {
     })
 }
 
-pub fn microphone_schema(devices: Vec<String>) -> PresetSchemaNode {
+pub fn microphone_schema(devices: Vec<String>) -> PresetSchema {
     let mut microhone_options = vec![HigherOrderChoiceOption {
         display_name: "Disabled".to_owned(),
         modifiers: vec![bool_modifier(
@@ -247,7 +247,7 @@ pub fn microphone_schema(devices: Vec<String>) -> PresetSchemaNode {
         }
     };
 
-    PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
+    PresetSchema::Choice(HigherOrderChoiceSchema {
         name: "microphone".into(),
         strings: HashMap::new(),
         flags: HashSet::new(),
@@ -257,8 +257,8 @@ pub fn microphone_schema(devices: Vec<String>) -> PresetSchemaNode {
     })
 }
 
-pub fn eye_face_tracking_schema() -> PresetSchemaNode {
-    PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
+pub fn eye_face_tracking_schema() -> PresetSchema {
+    PresetSchema::Choice(HigherOrderChoiceSchema {
         name: "eye_face_tracking".into(),
         strings: [("display_name".into(), "Eye and face tracking".into())]
             .into_iter()

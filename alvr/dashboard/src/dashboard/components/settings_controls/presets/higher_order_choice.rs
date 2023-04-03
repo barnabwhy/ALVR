@@ -1,11 +1,11 @@
 use std::collections::{HashMap, HashSet};
 
-use super::schema::{HigherOrderChoiceSchema, PresetModifierOperation};
+use super::schema::{HigherOrderChoiceOption, PresetModifierOperation};
 use crate::dashboard::components::{NestingInfo, SettingControl};
 use alvr_packets::{PathSegment, PathValuePair};
 use eframe::egui::Ui;
 use serde_json as json;
-use settings_schema::{SchemaEntry, SchemaNode};
+use settings_schema::{ChoiceControlType, SchemaEntry, SchemaNode};
 
 pub struct Control {
     name: String,

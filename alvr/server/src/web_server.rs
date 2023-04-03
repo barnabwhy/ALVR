@@ -13,7 +13,7 @@ use bytes::Buf;
 use futures::SinkExt;
 use headers::HeaderMapExt;
 use hyper::{
-    header::{HeaderValue, ACCESS_CONTROL_ALLOW_ORIGIN, CACHE_CONTROL, CONTENT_TYPE},
+    header::{HeaderValue, ACCESS_CONTROL_ALLOW_ORIGIN, CACHE_CONTROL},
     service, Body, Request, Response, StatusCode,
 };
 use serde::de::DeserializeOwned;
@@ -21,7 +21,6 @@ use serde_json as json;
 use std::{net::SocketAddr, thread};
 use tokio::sync::broadcast::{self, error::RecvError};
 use tokio_tungstenite::{tungstenite::protocol, WebSocketStream};
-use tokio_util::codec::{BytesCodec, FramedRead};
 
 pub const WS_BROADCAST_CAPACITY: usize = 256;
 
@@ -221,37 +220,7 @@ async fn http_api(
             res
         }
         "/api/ping" => reply(StatusCode::OK)?,
-        other_uri => {
-            if other_uri.contains("..") {
-                // Attempted tree traversal
-                reply(StatusCode::FORBIDDEN)?
-            } else {
-                let path_branch = match other_uri {
-                    "/" => "/index.html",
-                    other_path => other_path,
-                };
-
-                let maybe_file = tokio::fs::File::open(format!(
-                    "{}{path_branch}",
-                    FILESYSTEM_LAYOUT.dashboard_dir().to_string_lossy(),
-                ))
-                .await;
-
-                if let Ok(file) = maybe_file {
-                    let mut builder = Response::builder();
-                    if other_uri.ends_with(".js") {
-                        builder = builder.header(CONTENT_TYPE, "text/javascript");
-                    }
-                    if other_uri.ends_with(".wasm") {
-                        builder = builder.header(CONTENT_TYPE, "application/wasm");
-                    }
-
-                    builder.body(Body::wrap_stream(FramedRead::new(file, BytesCodec::new())))?
-                } else {
-                    reply(StatusCode::NOT_FOUND)?
-                }
-            }
-        }
+        _ => reply(StatusCode::NOT_FOUND)?,
     };
 
     response.headers_mut().insert(

@@ -19,7 +19,6 @@ pub struct PresetModifier {
 pub struct HigherOrderChoiceOption {
     pub display_name: String,
     pub modifiers: Vec<PresetModifier>,
-    pub content: Option<PresetSchemaNode>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -33,9 +32,17 @@ pub struct HigherOrderChoiceSchema {
 }
 
 #[derive(Serialize, Deserialize)]
-pub enum PresetSchemaNode {
-    HigherOrderChoice(HigherOrderChoiceSchema),
+pub struct MirrorSchema {
+    pub path: String, // session-style path
+    pub name_override: Option<String>,
+    pub strings_override: HashMap<String, String>,
+    pub flags_override: HashSet<String>,
+}
 
-    // session-style path
-    Mirror(String),
+#[derive(Serialize, Deserialize)]
+pub enum PresetSchema {
+    Choice(HigherOrderChoiceSchema),
+    Mirror(MirrorSchema),
+    GameAudioPlaceholder,
+    MicrophonePlaceholder,
 }
